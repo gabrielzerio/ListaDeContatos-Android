@@ -49,5 +49,5 @@
         android:visibility="invisible"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/baseline_back_hand_24" />
+        app:srcCompat="@drawable/baseline_star_24" />
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,4 +1,4 @@
-package com.example.todo_list;
+package com.example.lista_contatos;
 
 import com.google.gson.annotations.SerializedName;
 

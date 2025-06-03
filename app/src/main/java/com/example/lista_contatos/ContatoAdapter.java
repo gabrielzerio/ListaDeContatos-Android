@@ -1,4 +1,4 @@
-package com.example.todo_list;
+package com.example.lista_contatos;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -10,7 +10,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.List;
-import java.util.Objects;
 
 public class ContatoAdapter extends BaseAdapter {
     private Context context;

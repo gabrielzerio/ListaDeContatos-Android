@@ -1,11 +1,14 @@
-package com.example.todo_list;
+package com.example.lista_contatos;
 
 import android.app.AlertDialog;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.CompoundButton;
 import android.widget.ListView;
+import android.widget.Switch;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
@@ -28,6 +31,8 @@ public class MainActivity extends AppCompatActivity {
 
     private ContatoAdapter contatoAdapter;
     private ListView lvContatos;
+
+    private Switch swFavoritos;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -39,7 +44,9 @@ public class MainActivity extends AppCompatActivity {
             return insets;
         });
         lvContatos = findViewById(R.id.lvContatos);
-        buscarContatos();
+        swFavoritos = findViewById(R.id.swFavoritos);
+
+        buscarContatos("");
         editarContato();
 
         FloatingActionButton botaoFlutuante = findViewById(R.id.botaoFlutuante);
@@ -50,12 +57,36 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(telaCadastrar);
             }
         });
+        swFavoritos.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    // Switch foi ativado (ligado)
+                    buscarContatos("true");
+                } else {
+                    buscarContatos("");
+
+                }
+            }
+        });
+        lvContatos.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Contato contato = (Contato) parent.getItemAtPosition(position);
+
+                Intent intent = new Intent(Intent.ACTION_DIAL); // ou Intent.ACTION_CALL com permissão
+                intent.setData(Uri.parse("tel:" + contato.getNumeroCelular()));
+
+                startActivity(intent);
+            }
+        });
+
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        buscarContatos();
+        buscarContatos("");
     }
 
 
@@ -101,7 +132,7 @@ public class MainActivity extends AppCompatActivity {
             public void onResponse(Call<Void> call, Response<Void> response) {
                 if (response.isSuccessful()) {
                     Toast.makeText(MainActivity.this, "Contato excluída com sucesso!", Toast.LENGTH_LONG).show();
-                    buscarContatos();
+                    buscarContatos("");
                 } else {
                     Toast.makeText(MainActivity.this, "Houve um erro ao excluir contato", Toast.LENGTH_LONG).show();
                 }
@@ -114,14 +145,14 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    private void buscarContatos(){
+    private void buscarContatos(String soFavoritos){
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(Constantes.API_URL)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
         ContatosApi contatosApi = retrofit.create(ContatosApi.class);
 
-        Call<List<Contato>> getContatosServer = contatosApi.getContatos("");
+        Call<List<Contato>> getContatosServer = contatosApi.getContatos(soFavoritos);
 
         getContatosServer.enqueue(new Callback<List<Contato>>() {
             @Override
