@@ -2,7 +2,9 @@ package com.example.todo_list;
 
 import com.google.gson.annotations.SerializedName;
 
-public class Contato {
+import java.io.Serializable;
+
+public class Contato implements Serializable {
     private int id;
     private String name;
     @SerializedName("phone")
@@ -16,6 +18,12 @@ public class Contato {
         this.numeroCelular = numeroCelular;
         this.favorito = favorito;
     }
+    public Contato(String name, String numeroCelular, boolean favorito) {
+        this.name = name;
+        this.numeroCelular = numeroCelular;
+        this.favorito = favorito;
+    }
+
 
     public int getId() {
         return id;

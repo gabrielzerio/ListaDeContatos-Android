@@ -40,7 +40,7 @@ public class MainActivity extends AppCompatActivity {
         });
         lvContatos = findViewById(R.id.lvContatos);
         buscarContatos();
-//        editarContato();
+        editarContato();
 
         FloatingActionButton botaoFlutuante = findViewById(R.id.botaoFlutuante);
         botaoFlutuante.setOnClickListener(new View.OnClickListener() {
@@ -59,33 +59,32 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-//    private void editarContato(){
-//        lvContatos.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
-//            @Override
-//            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-//                Contato contato = (Contato) parent.getItemAtPosition(position);
-//
-//                new AlertDialog.Builder(MainActivity.this)
-//                        .setTitle("Escolha uma opção")
-//                        .setMessage("O que deseja fazer com a contato?")
-//                        .setPositiveButton("Atualizar", ((dialog, which) -> {
-//
-//                                Intent telaCadastro = new Intent(MainActivity.this, CadastroActivity.class);
-//                                telaCadastro.putExtra("contato", (CharSequence) contato);
-//                                startActivity(telaCadastro);
-//
-//
-//                        }))
-//                        .setNegativeButton("Remover", ((dialog, which) -> {
-//                            removerContato(contato.getId());
-//                        }))
-//                        .setNeutralButton("Cancelar", null)
-//                        .show();
-//
-//                return true;
-//            }
-//        });
-//    }
+    private void editarContato(){
+        lvContatos.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+                Contato contato = (Contato) parent.getItemAtPosition(position);
+
+                new AlertDialog.Builder(MainActivity.this)
+                        .setTitle("Escolha uma opção")
+                        .setMessage("O que deseja fazer com a contato?")
+                        .setPositiveButton("Atualizar", ((dialog, which) -> {
+
+                                Intent telaCadastro = new Intent(MainActivity.this, CadastroActivity.class);
+                                telaCadastro.putExtra("contato", contato);
+                                startActivity(telaCadastro);
+
+                        }))
+                        .setNegativeButton("Remover", ((dialog, which) -> {
+                            removerContato(contato.getId());
+                        }))
+                        .setNeutralButton("Cancelar", null)
+                        .show();
+
+                return true;
+            }
+        });
+    }
 
     private void removerContato(int contatoId) {
 
@@ -122,7 +121,7 @@ public class MainActivity extends AppCompatActivity {
                 .build();
         ContatosApi contatosApi = retrofit.create(ContatosApi.class);
 
-        Call<List<Contato>> getContatosServer = contatosApi.getContatos();
+        Call<List<Contato>> getContatosServer = contatosApi.getContatos("");
 
         getContatosServer.enqueue(new Callback<List<Contato>>() {
             @Override
